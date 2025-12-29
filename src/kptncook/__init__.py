@@ -18,6 +18,7 @@ from .mealie import MealieApiClient, kptncook_to_mealie
 from .models import Recipe, localized_fallback
 from .paprika import PaprikaExporter
 from .tandoor import TandoorExporter
+from .markdown_exporter import MarkdownExporter
 from .repositories import RecipeInDb, RecipeRepository
 
 __all__ = [
@@ -918,6 +919,25 @@ def export_recipes_to_tandoor(_id: OptionalId = typer.Argument(None)):
     rprint(
         "\n The data was exported to '%s'. Open the export file with Tandoor.\n"
         % ", ".join(filenames)
+    )
+
+
+@cli.command(name="export-recipes-to-markdown")
+def export_recipes_to_markdown(_id: OptionalId = typer.Argument(None)):
+    """
+    Export one recipe or all recipes to simple Markdown files
+
+    Example usage 1:  kptncook  export-recipes-to-markdown 635a68635100007500061cd7
+    Example usage 2:  kptncook  export-recipes-to-markdown
+    """
+    if _id:
+        recipes = get_recipe_by_id(_id)
+    else:
+        recipes = get_kptncook_recipes_from_repository()
+    exporter = MarkdownExporter()
+    paths = exporter.export(recipes=recipes)
+    rprint(
+        "\n The data was exported to '%s'.\n" % ", ".join(str(p) for p in paths)
     )
 
 
