@@ -187,10 +187,16 @@ class StepIngredient(BaseModel):
         return values
 
 
+class Timer(BaseModel):
+    min_or_exact: int | None = Field(None, alias="minOrExact")
+    max: int | None = None
+
+
 class RecipeStep(BaseModel):
     title: LocalizedString
     image: Image
     ingredients: list[StepIngredient | None] | None = None
+    timers: list[Timer] | None = None
 
 
 class Recipe(BaseModel):
@@ -218,10 +224,3 @@ class Recipe(BaseModel):
                     values["localizedTitle"] = title
         return values
 
-    def get_image_url(self, api_key: str) -> str | None:
-        try:
-            [image] = [i for i in self.image_list if i.type == "cover"]
-        except ValueError:
-            return None
-        image_url = f"{image.url}?kptnkey={api_key}"
-        return image_url
