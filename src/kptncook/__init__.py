@@ -39,6 +39,7 @@ __all__ = [
     "list_recipes_with_ingredients",
     "export_recipes_to_paprika",
     "export_recipes_to_tandoor",
+    "export_recipes_to_markdown",
 ]
 
 __version__ = "0.0.26"
